@@ -1,0 +1,1 @@
+# ws-resource-name-resolver-plugin
