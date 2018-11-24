@@ -109,3 +109,6 @@ bintray {
         }
     }
 }
+
+bintrayUpload.dependsOn(jar, javadocJar, sourcesJar)
+bintrayUpload.dependsOn "generatePomFileForProductionPublication"
