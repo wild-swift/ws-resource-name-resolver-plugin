@@ -16,7 +16,6 @@
 plugins {
     id 'com.android.application'
     id 'ws-android-resource-names'
-    id 'kotlin-android'
 }
 
 
