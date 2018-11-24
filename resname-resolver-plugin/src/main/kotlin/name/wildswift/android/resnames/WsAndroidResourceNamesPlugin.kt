@@ -20,6 +20,7 @@ import com.android.build.gradle.AppExtension
 import com.android.build.gradle.FeatureExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.api.BaseVariant
+import name.wildswift.android.resnames.GenerateResourceNamesTask.Companion.APP_ID_KEY
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import java.io.File
@@ -44,22 +45,22 @@ class WsAndroidResourceNamesPlugin : Plugin<Project> {
     }
 
     private fun processVariant(project: Project, variant: BaseVariant) {
+        val pack = variant.applicationId
         variant.outputs.all {
-
+            val processResourcesTask = it.processResources
+            val rFile = processResourcesTask.sourceOutputDir.resolve(pack.replace('.', File.separatorChar)).resolve("R.java")
             val outputDir = project.buildDir.resolve("generated/source/resNames/${variant.dirName}/${it.dirName}")
 
-            val task = project.tasks.create("generateResNames${it.name.capitalize()}", GenerateResourceNamesTask::class.java)
-            task.outputs.dir(outputDir)
+            val task = project.tasks
+                    .create("generateResNames${it.name.capitalize()}", GenerateResourceNamesTask::class.java)
+                    .apply {
+                        setProperty(APP_ID_KEY, pack)
+                        inputs.file(rFile)
+                        outputs.dir(outputDir)
+                        dependsOn(processResourcesTask)
+                    }
+
             variant.registerJavaGeneratingTask(task, outputDir)
-
-            val processResources = it.processResources
-            task.dependsOn(processResources)
-
-            val pack = variant.applicationId
-
-            val rFile = processResources.sourceOutputDir.resolve(pack.replace('.', File.separatorChar)).resolve("R.java")
-
-            task.inputs.file(rFile)
         }
 
     }
