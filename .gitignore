@@ -1,8 +1,25 @@
 # Compiled class file
 *.class
 
+# Generated files
+bin/
+gen/
+out/
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+gradle.properties
+
 # Log file
 *.log
+
+# IntelliJ
+*.iml
+.idea/*
 
 # BlueJ files
 *.ctxt
