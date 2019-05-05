@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Wild Swift
+ * Copyright (C) 2019 Wild Swift
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,17 @@
  * limitations under the License.
  */
 
-buildscript {
-    ext.kotlin_version = '1.3.21'
-    ext.publish_version = '1.2'
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
-    }
-}
+package name.wildswift.testapp.lib;
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        mavenCentral()
-    }
-}
+import android.app.Activity;
+import android.os.Bundle;
+/**
+ * Created by swift
+ */
+public class MainActivity extends Activity {
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
 }

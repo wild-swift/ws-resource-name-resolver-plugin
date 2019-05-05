@@ -32,11 +32,16 @@ import javax.lang.model.element.Modifier.*
 /**
  * Created by swift
  */
-open class GenerateResourceNamesTask : DefaultTask() {
+@Suppress("ConstantConditionIf")
+open class GenerateResourceNamesFromSourcesTask : DefaultTask() {
+    private val debug = false
 
     @TaskAction
     fun generateResNamesFile() {
         val outputPath = outputs.files.files.firstOrNull() ?: return
+        if (debug) {
+            inputs.files.files.forEach { println(it) }
+        }
         inputs.files.files.forEach {
             JavaParser
                     .parse(it)
@@ -52,11 +57,13 @@ open class GenerateResourceNamesTask : DefaultTask() {
                                 .build()
                     }
                     .forEach {
-                        val output = ByteArrayOutputStream()
-                        val outputStreamWriter = OutputStreamWriter(output)
-                        it.writeTo(outputStreamWriter)
-                        outputStreamWriter.flush()
-                        println(String(output.toByteArray()))
+                        if (debug) {
+                            val output = ByteArrayOutputStream()
+                            val outputStreamWriter = OutputStreamWriter(output)
+                            it.writeTo(outputStreamWriter)
+                            outputStreamWriter.flush()
+                            println(String(output.toByteArray()))
+                        }
 
                         it.writeTo(outputPath)
                     }
