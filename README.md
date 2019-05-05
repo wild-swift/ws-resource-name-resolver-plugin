@@ -10,7 +10,7 @@ buildscript {
     }
     dependencies {
         ...
-        classpath 'name.wildswift.android:resname-resolver:1.1'
+        classpath 'name.wildswift.android:resname-resolver:1.2'
     }
 }
 ...
