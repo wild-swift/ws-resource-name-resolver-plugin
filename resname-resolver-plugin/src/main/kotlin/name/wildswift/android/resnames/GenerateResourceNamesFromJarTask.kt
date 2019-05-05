@@ -20,7 +20,6 @@ import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import java.io.ByteArrayOutputStream
 import java.io.OutputStreamWriter
@@ -34,15 +33,17 @@ import javax.lang.model.element.Modifier.*
  */
 @Suppress("ConstantConditionIf")
 open class GenerateResourceNamesFromJarTask : DefaultTask() {
-    private val debug = false
+    companion object {
+        private const val DEBUG = false
+    }
 
-    @Input
-    var archPath: String = ""
+    var applicationId: String = ""
 
     @TaskAction
     fun generateResNamesFile() {
         val outputPath = outputs.files.files.firstOrNull() ?: return
-        if (debug) {
+        val archPath = applicationId.replace('.', '/')
+        if (DEBUG) {
             inputs.files.files.joinToString(separator = "\n") { it.toString() }.let { println("input = $it") }
             println("output = $outputPath")
             println("path = $archPath")
@@ -54,13 +55,13 @@ open class GenerateResourceNamesFromJarTask : DefaultTask() {
                     .toList()
                     .filter { it.name.startsWith("$archPath/R$") }
                     .also { classes ->
-                        if (debug) {
+                        if (DEBUG) {
                             println(classes.joinToString { it.name })
                         }
                     }
                     .map { entry ->
                         val members = classReader.loadMembersNames(entry) ?: return@map null
-                        if (debug) {
+                        if (DEBUG) {
                             members.forEach {
                                 println("class ${entry.name}, entry = ${it}")
                             }
@@ -74,7 +75,7 @@ open class GenerateResourceNamesFromJarTask : DefaultTask() {
                                 .build()
                     }
                     .forEach {
-                        if (debug) {
+                        if (DEBUG) {
                             val output = ByteArrayOutputStream()
                             val outputStreamWriter = OutputStreamWriter(output)
                             it.writeTo(outputStreamWriter)

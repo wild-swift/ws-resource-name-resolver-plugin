@@ -28,7 +28,11 @@ import java.io.File
  * Created by swift
  */
 class WsAndroidResourceNamesPlugin : Plugin<Project> {
-    private val debug = false
+    companion object {
+        private const val APP_ID_KEY = "applicationId"
+        private const val DEBUG = false
+    }
+
 
     override fun apply(target: Project) {
         target.extensions.findByType(AppExtension::class.java)?.applicationVariants?.all {
@@ -46,11 +50,12 @@ class WsAndroidResourceNamesPlugin : Plugin<Project> {
     }
 
     private fun processVariant(project: Project, variant: BaseVariant) {
+        val pack = variant.applicationId
+
         variant.outputs.all { output ->
             val processResources = output.processResourcesProvider
 
-            val pack = variant.applicationId
-            if (debug) {
+            if (DEBUG) {
                 println("dir = ${processResources.get().sourceOutputDir}, pack = $pack")
             }
 
@@ -58,16 +63,15 @@ class WsAndroidResourceNamesPlugin : Plugin<Project> {
 
             val outputDir = project.buildDir.resolve("generated/source/resNames/${variant.dirName}/${output.dirName}")
 
-            val task = project.tasks.create("generateResNames${output.name.capitalize()}", if (rFile.toString().endsWith(".jar")) GenerateResourceNamesFromJarTask::class.java else GenerateResourceNamesFromSourcesTask::class.java)
-            task.outputs.dir(outputDir)
-            if (rFile.toString().endsWith(".jar")) {
-                task.setProperty("archPath", pack.replace('.', '/'))
-            }
+            val task = project.tasks
+                    .create("generateResNames${output.name.capitalize()}", if (rFile.toString().endsWith(".jar")) GenerateResourceNamesFromJarTask::class.java else GenerateResourceNamesFromSourcesTask::class.java)
+                    .apply {
+                        setProperty(APP_ID_KEY, pack)
+                        inputs.file(rFile)
+                        outputs.dir(outputDir)
+                        dependsOn(processResources)
+                    }
             variant.registerJavaGeneratingTask(task, outputDir)
-
-            task.dependsOn(processResources)
-
-            task.inputs.file(rFile)
         }
 
     }
