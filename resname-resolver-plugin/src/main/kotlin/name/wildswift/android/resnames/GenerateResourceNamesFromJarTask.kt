@@ -20,6 +20,7 @@ import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import java.io.ByteArrayOutputStream
 import java.io.OutputStreamWriter
@@ -37,6 +38,7 @@ open class GenerateResourceNamesFromJarTask : DefaultTask() {
         private const val DEBUG = false
     }
 
+    @Input
     var applicationId: String = ""
 
     @TaskAction
