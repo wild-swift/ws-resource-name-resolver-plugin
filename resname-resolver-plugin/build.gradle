@@ -55,7 +55,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.github.javaparser:javaparser-core:3.5.14"
 
-    implementation "com.android.tools.build:gradle:3.5.1"
+    implementation "com.android.tools.build:gradle:3.6.3"
 
     testImplementation 'junit:junit:4.12'
     testImplementation gradleTestKit()
