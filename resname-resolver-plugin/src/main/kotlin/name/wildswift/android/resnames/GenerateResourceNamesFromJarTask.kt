@@ -65,7 +65,7 @@ open class GenerateResourceNamesFromJarTask : DefaultTask() {
                             val members = classReader.loadMembersNames(entry) ?: return@map null
                             if (DEBUG) {
                                 members.forEach {
-                                    println("class ${entry.name}, entry = ${it}")
+                                    println("class ${entry.name}, entry = $it")
                                 }
                             }
                             val name = entry.name.substring(archPath.length + "/R$".length).removeSuffix(".class")
