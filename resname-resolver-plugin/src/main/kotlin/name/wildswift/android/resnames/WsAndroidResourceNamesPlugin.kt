@@ -17,7 +17,6 @@
 package name.wildswift.android.resnames
 
 import com.android.build.gradle.AppExtension
-import com.android.build.gradle.FeatureExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.api.BaseVariant
 import org.gradle.api.Plugin
@@ -38,12 +37,6 @@ class WsAndroidResourceNamesPlugin : Plugin<Project> {
             processVariant(target, it)
         }
         target.extensions.findByType(LibraryExtension::class.java)?.libraryVariants?.all {
-            processVariant(target, it)
-        }
-        target.extensions.findByType(FeatureExtension::class.java)?.libraryVariants?.all {
-            processVariant(target, it)
-        }
-        target.extensions.findByType(FeatureExtension::class.java)?.featureVariants?.all {
             processVariant(target, it)
         }
     }

@@ -67,12 +67,12 @@ class PluginTest {
         val result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withPluginClasspath()
-                .withArguments("build")
+                .withArguments("--stacktrace", "build")
                 .forwardStdOutput(OutputStreamWriter(System.out))
                 .forwardStdError(OutputStreamWriter(System.err))
                 .build()
 
-        assertEquals(SUCCESS, result.task(":app:build")?.outcome)
+        assertEquals(SUCCESS, result?.task(":app:build")?.outcome)
 
         val attrRNames = appFolder.resolve("build/generated/source/resNames/release/name/wildswift/testapp/AttrRNames.java").readLines().joinToString("\n")
         assertEquals("""
@@ -134,10 +134,10 @@ class PluginTest {
     private fun buildFile(): String {
         return """
                 |buildscript {
-                |    ext.kotlin_version = '1.3.21'
+                |    ext.kotlin_version = '1.7.10'
                 |    repositories {
                 |        google()
-                |        jcenter()
+                |        mavenCentral()
                 |    }
                 |    dependencies {
                 |        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${'$'}kotlin_version"
@@ -147,7 +147,6 @@ class PluginTest {
                 |allprojects {
                 |    repositories {
                 |        google()
-                |        jcenter()
                 |        mavenCentral()
                 |    }
                 |}
